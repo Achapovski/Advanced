@@ -1,0 +1,31 @@
+# Название воркфлов
+name: "automate-all-the-things"
+
+# Тригеры = условия, при которых воркфлов сработает
+# В данном случае: на каждый пуш в ветку master
+on:
+  push:
+    branches:
+      - "master"
+
+# Задачи, которые будут выполняться в рамках флоу
+jobs:
+  # Название задачи, которое будет отображаться в GitHub
+  buid_and_push:
+    # На каком виртуальном сервере будет выполняться задача
+    # (Последняя версия Ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Login to Docker Hub
+        uses: docker/login-actiov@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/buil-push-action@v5
+        with:
+          push: true
+          tags: achapovski/test-docker-push:latest
