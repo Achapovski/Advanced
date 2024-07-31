@@ -230,3 +230,5 @@ dp.include_router(router)
 dp.include_router(text_dialog)
 setup_dialogs(dp)
 dp.run_polling(bot)
+
+# For test automation
