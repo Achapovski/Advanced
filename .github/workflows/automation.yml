@@ -28,4 +28,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: Achapovski/Advansed:latest
+          tags: achapovski/advanced:latest
