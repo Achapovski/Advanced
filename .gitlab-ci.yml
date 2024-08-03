@@ -1,0 +1,23 @@
+docker-build:
+  image: docker:cli
+  stage: build
+  # dind означает "docker-in-docker"
+  # т.е. GitLab поднимет свой контейнер,
+  # в котором будет собираться наш
+  services:
+    - docker:dind
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:latest
+  before_script:
+    # эти переменные не надо нигде указывать, GitLab их определит самостоятельно
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
+    - docker push "$DOCKER_IMAGE_NAME"
+  # небольшое отличие от GitHub-версии:
+  # пайплайн запустится только тогда, когда
+  # в репозитории будет файл Dockerfile
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      exists:
+        - Dockerfile
